@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Alternativas Grátis Overlay - Live</title>
+    <style>
+        :root {
+            --primary-green: #22c55e;
+            --danger-red: #ef4444;
+            --bg-dark: rgba(10, 10, 10, 0.95);
+            --text-gray: #cbd5e1;
+        }
+
+        body {
+            margin: 0; width: 1280px; height: 720px; overflow: hidden;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            background: transparent; /* Fundo transparente para o OBS */
+        }
+
+        #card {
+            width: 900px; /* Aumentado para centralizar e dar espaço às imagens */
+            background: var(--bg-dark);
+            border-radius: 30px; padding: 40px;
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+            backdrop-filter: blur(15px);
+            text-align: center;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0; transform: scale(0.9);
+            position: relative;
+        }
+
+        #card.active { opacity: 1; transform: scale(1); }
+
+        .label {
+            color: var(--primary-green); font-size: 18px;
+            font-weight: 800; text-transform: uppercase;
+            letter-spacing: 4px; margin-bottom: 30px;
+        }
+
+        /* Container das Imagens */
+        .comparison-container {
+            display: flex; justify-content: center; align-items: center;
+            gap: 40px; margin-bottom: 30px;
+        }
+
+        .app-box { width: 220px; text-align: center; }
+        
+        .app-img {
+            width: 180px; height: 180px;
+            object-fit: contain; background: rgba(255,255,255,0.05);
+            border-radius: 20px; padding: 15px; margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .vs { font-size: 40px; font-weight: 900; color: var(--text-gray); opacity: 0.5; }
+
+        /* Textos */
+        .app-name { font-size: 32px; font-weight: 700; display: block; }
+        .pago-txt { color: var(--danger-red); text-decoration: line-through; }
+        .gratis-txt { color: var(--primary-green); }
+
+        .desc-box {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 25px; margin-top: 20px;
+        }
+
+        .desc { 
+            font-size: 24px; /* Texto aumentado */
+            color: var(--text-gray); 
+            line-height: 1.4; 
+            max-width: 800px; margin: 0 auto;
+        }
+
+        #progress-bar {
+            position: absolute; bottom: 0; left: 0;
+            height: 6px; background: var(--primary-green); width: 0%;
+            border-radius: 0 0 30px 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="card">
+    <div class="label">💡 Economize: Alternativa Aberta</div>
+    
+    <div class="comparison-container">
+        <div class="app-box">
+            <img id="img-pago" class="app-img" src="" alt="">
+            <span id="pago" class="app-name pago-txt">---</span>
+        </div>
+
+        <div class="vs">VS</div>
+
+        <div class="app-box">
+            <img id="img-gratis" class="app-img" src="" alt="">
+            <span id="gratis" class="app-name gratis-txt">---</span>
+        </div>
+    </div>
+
+    <div class="desc-box">
+        <div id="desc" class="desc">---</div>
+    </div>
+    
+    <div id="progress-bar"></div>
+</div>
+
+<script>
+    // No GitHub Pages, use o caminho relativo ou a URL completa do seu RAW JSON
+    const JSON_URL = 'alternativas.json'; 
+    const INTERVALO = 30000;
+
+    let baseDados = [];
+    let index = 0;
+
+    async function fetchData() {
+        try {
+            const response = await fetch(JSON_URL);
+            baseDados = await response.json();
+            baseDados.sort(() => Math.random() - 0.5); 
+            updateDisplay();
+        } catch (err) {
+            console.error("Erro ao carregar dados:", err);
+        }
+    }
+
+    function updateDisplay() {
+        const card = document.getElementById('card');
+        const progressBar = document.getElementById('progress-bar');
+        
+        card.classList.remove('active');
+
+        setTimeout(() => {
+            const item = baseDados[index];
+            
+            // Textos
+            document.getElementById('pago').innerText = item.pago;
+            document.getElementById('gratis').innerText = item.gratis;
+            document.getElementById('desc').innerText = item.desc;
+
+            // Imagens (Usa Clearbit API para buscar ícones automaticamente pelo nome)
+            // Caso você tenha as imagens no repo, troque para item.img_pago
+            document.getElementById('img-pago').src = `https://logo.clearbit.com/${item.pago.toLowerCase().replace(/\s/g, '')}.com?size=200`;
+            document.getElementById('img-gratis').src = `https://logo.clearbit.com/${item.gratis.toLowerCase().replace(/\s/g, '')}.com?size=200`;
+
+            // Fallback caso a imagem da Clearbit falhe (ex: app open source sem domínio .com)
+            document.querySelectorAll('.app-img').forEach(img => {
+                img.onerror = function() { this.src = 'https://cdn-icons-png.flaticon.com/512/25/25231.png'; };
+            });
+
+            card.classList.add('active');
+
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.transition = `width ${INTERVALO}ms linear`;
+                progressBar.style.width = '100%';
+            }, 50);
+
+            index = (index + 1) % baseDados.length;
+        }, 800);
+    }
+
+    fetchData();
+    setInterval(updateDisplay, INTERVALO);
+</script>
+
+</body>
+</html>

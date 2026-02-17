@@ -1,0 +1,127 @@
+[
+  {
+    "pago": "Adobe Photoshop",
+    "gratis": "GIMP",
+    "desc": "Editor de imagens profissional com suporte a camadas, máscaras e ferramentas avançadas de edição."
+  },
+  {
+    "pago": "Microsoft Office",
+    "gratis": "LibreOffice",
+    "desc": "Suíte completa de produtividade compatível com Word, Excel e PowerPoint de forma gratuita."
+  },
+  {
+    "pago": "Adobe Premiere",
+    "gratis": "DaVinci Resolve",
+    "desc": "Edição de vídeo profissional com o melhor sistema de correção de cores do mercado de cinema."
+  },
+  {
+    "pago": "Adobe Illustrator",
+    "gratis": "Inkscape",
+    "desc": "Poderoso editor de gráficos vetoriais open source para criar logos, ícones e ilustrações."
+  },
+  {
+    "pago": "Adobe After Effects",
+    "gratis": "Natron",
+    "desc": "Compositor digital para efeitos visuais e motion graphics baseado em nós, estilo profissional."
+  },
+  {
+    "pago": "AutoCAD",
+    "gratis": "FreeCAD",
+    "desc": "Modelador 3D paramétrico voltado para engenharia, arquitetura e design de produtos reais."
+  },
+  {
+    "pago": "LastPass",
+    "gratis": "Bitwarden",
+    "desc": "Gerenciador de senhas open source com criptografia de ponta a ponta e sincronização ilimitada."
+  },
+  {
+    "pago": "Evernote",
+    "gratis": "Joplin",
+    "desc": "Aplicativo de notas seguro que permite sincronização com sua própria nuvem e suporte a Markdown."
+  },
+  {
+    "pago": "Slack",
+    "gratis": "Mattermost",
+    "desc": "Alternativa de comunicação para equipes com foco total em privacidade e controle de dados."
+  },
+  {
+    "pago": "Sublime Text",
+    "gratis": "VS Code",
+    "desc": "Editor de código leve, expansível e o mais utilizado por programadores ao redor do mundo."
+  },
+  {
+    "pago": "WinRAR",
+    "gratis": "7-Zip",
+    "desc": "O utilitário definitivo para compressão de arquivos, open source e com alta taxa de compactação."
+  },
+  {
+    "pago": "Adobe Lightroom",
+    "gratis": "Darktable",
+    "desc": "Fluxo de trabalho fotográfico e edição de arquivos RAW para fotógrafos que buscam o profissional."
+  },
+  {
+    "pago": "MATLAB",
+    "gratis": "GNU Octave",
+    "desc": "Software de computação numérica compatível com a linguagem do MATLAB para fins acadêmicos."
+  },
+  {
+    "pago": "Autodesk Maya",
+    "gratis": "Blender",
+    "desc": "Software 3D completo para modelagem, animação e renderização de filmes e jogos profissionais."
+  },
+  {
+    "pago": "Spotify Premium",
+    "gratis": "Spotube",
+    "desc": "Cliente open source que permite ouvir suas playlists sem anúncios e com foco em privacidade."
+  },
+  {
+    "pago": "Windows 11",
+    "gratis": "Linux Mint",
+    "desc": "Sistema operacional gratuito, seguro e ideal para quem está migrando do ambiente Windows."
+  },
+  {
+    "pago": "TeamViewer",
+    "gratis": "RustDesk",
+    "desc": "Acesso e suporte remoto via desktop de forma simples, rápida e sem custos de licença."
+  },
+  {
+    "pago": "Snagit",
+    "gratis": "ShareX",
+    "desc": "A melhor ferramenta para capturar tela, criar GIFs e automatizar uploads de imagens no PC."
+  },
+  {
+    "pago": "Acrobat Pro",
+    "gratis": "PDF24",
+    "desc": "Solução completa para editar, converter, proteger e comprimir arquivos PDF sem limitações."
+  },
+  {
+    "pago": "Unity Pro",
+    "gratis": "Godot Engine",
+    "desc": "Motor de jogos open source para criar games 2D e 3D sem pagar royalties sobre suas vendas."
+  },
+  {
+    "pago": "VMware",
+    "gratis": "VirtualBox",
+    "desc": "Rode múltiplos sistemas operacionais de forma virtualizada no seu computador gratuitamente."
+  },
+  {
+    "pago": "Trello Premium",
+    "gratis": "Wekan",
+    "desc": "Quadro Kanban clássico para gestão de tarefas e projetos com foco em software livre."
+  },
+  {
+    "pago": "IntelliJ IDEA",
+    "gratis": "VS Code",
+    "desc": "Ambiente de desenvolvimento poderoso que suporta quase todas as linguagens com extensões."
+  },
+  {
+    "pago": "Adobe Audition",
+    "gratis": "Audacity",
+    "desc": "Editor de áudio multifaixa para gravação, mixagem e limpeza de som de forma profissional."
+  },
+  {
+    "pago": "Tableau",
+    "gratis": "Metabase",
+    "desc": "Ferramenta de Business Intelligence para visualizar dados e criar dashboards empresariais."
+  }
+]
