@@ -2,17 +2,22 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Overlay Alternativas Tech V2</title>
+    <title>Overlay Alternativas Tech - Live</title>
     <style>
         :root {
-            --green: #22c55e; --red: #ef4444; --bg: rgba(10, 10, 10, 0.98);
+            --green: #22c55e;
+            --red: #ef4444;
+            --bg: rgba(10, 10, 10, 0.98);
             --accent: #38bdf8;
+            --text-gray: #94a3b8;
         }
+
         body {
             margin: 0; width: 1280px; height: 720px; display: flex; 
             justify-content: center; align-items: center; background: transparent;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
+
         #card {
             width: 950px; background: var(--bg); border-radius: 40px; padding: 50px;
             text-align: center; border: 1px solid rgba(255,255,255,0.1);
@@ -20,6 +25,7 @@
             transition: all 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
             position: relative;
         }
+
         #card.active { opacity: 1; transform: scale(1); }
 
         /* Selo de Categoria */
@@ -32,19 +38,30 @@
         }
 
         .comparison { display: flex; justify-content: center; align-items: center; gap: 60px; margin-top: 20px; }
-        .app-box { display: flex; flex-direction: column; align-items: center; }
+        
+        .app-box { display: flex; flex-direction: column; align-items: center; width: 300px; }
+        
         .app-img { 
-            width: 180px; height: 180px; object-fit: contain; 
+            width: 150px; height: 150px; object-fit: contain; 
             background: #fff; border-radius: 30px; padding: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .name { font-size: 38px; font-weight: 900; margin-top: 20px; display: block; }
+
+        .name { font-size: 38px; font-weight: 900; margin-top: 20px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
         .pago { color: var(--red); text-decoration: line-through; }
         .gratis { color: var(--green); }
+        
         .vs { font-size: 50px; font-weight: 900; color: #333; }
         
         .desc-box { margin-top: 40px; border-top: 2px solid #222; padding-top: 30px; }
-        .desc { font-size: 26px; color: #94a3b8; line-height: 1.4; font-style: italic; }
+        .desc { font-size: 26px; color: var(--text-gray); line-height: 1.4; font-style: italic; }
+
+        /* Barra de Progresso */
+        #progress-container {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 8px;
+            background: rgba(255,255,255,0.05); border-radius: 0 0 40px 40px; overflow: hidden;
+        }
+        #progress-bar { height: 100%; background: var(--green); width: 0%; }
     </style>
 </head>
 <body>
@@ -52,65 +69,92 @@
 <div id="card">
     <div id="cat-badge">CATEGORIA</div>
     
-    // Dentro da função loop() no seu HTML, substitua as linhas das imagens por estas:
-
-const getIcon = (domain) => `https://www.google.com/s2/favicons?sz=128&domain=${domain}`;
-
-const imgPago = document.getElementById('img-pago');
-const imgGratis = document.getElementById('img-gratis');
-
-imgPago.src = getIcon(item.dom_pago);
-imgGratis.src = getIcon(item.dom_gratis);
-
-// PLANO B: Se o Google não achar, coloca um ícone padrão de "Software"
-imgPago.onerror = function() { this.src = 'https://cdn-icons-png.flaticon.com/512/7438/7438445.png'; };
-imgGratis.onerror = function() { this.src = 'https://cdn-icons-png.flaticon.com/512/7438/7438445.png'; };
+    <div class="comparison">
+        <div class="app-box">
+            <img id="img-pago" class="app-img" src="">
+            <span id="pago" class="name pago"></span>
+        </div>
+        <div class="vs">VS</div>
+        <div class="app-box">
+            <img id="img-gratis" class="app-img" src="">
+            <span id="gratis" class="name gratis"></span>
+        </div>
+    </div>
     
     <div class="desc-box">
         <div id="desc" class="desc"></div>
     </div>
+
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
 </div>
 
 <script>
-    // URL gerada na "Implantação" do Google Apps Script
+    // 1. Substitua pela URL gerada no "Implantar" do seu Google Apps Script
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqZKdV3lyres_v9l8_G_jkylqO_ArMr2X6qjKdrvZh5qRBTVCIOe58QKABfiDtPsw6mw/exec'; 
+    const INTERVALO = 30000; // 30 segundos
+
     let dados = [];
     let i = 0;
+
+    // Função para buscar ícone via Google Favicons API
+    const getIcon = (domain) => `https://www.google.com/s2/favicons?sz=128&domain=${domain}`;
+    const fallbackIcon = 'https://cdn-icons-png.flaticon.com/512/7438/7438445.png';
 
     async function load() {
         try {
             const res = await fetch(SCRIPT_URL);
             dados = await res.json();
-            loop();
-        } catch (e) { console.error("Erro ao carregar dados da planilha."); }
+            if (dados.length > 0) loop();
+        } catch (e) { 
+            console.error("Erro ao carregar dados da planilha. Verifique a URL e permissões."); 
+        }
     }
 
     function loop() {
         const card = document.getElementById('card');
+        const progressBar = document.getElementById('progress-bar');
+        
         card.classList.remove('active');
 
         setTimeout(() => {
             const item = dados[i];
             
-            // Atualiza Textos e Categoria
+            // Atualiza Textos
             document.getElementById('pago').innerText = item.pago;
             document.getElementById('gratis').innerText = item.gratis;
             document.getElementById('desc').innerText = item.desc;
             document.getElementById('cat-badge').innerText = item.categoria || "SOFTWARE";
             
-            // Logo.dev - Substitua 'SEU_TOKEN' se tiver um oficial, ou use sem para testes básicos
-            document.getElementById('img-pago').src = `https://img.logo.dev/${item.dom_pago}?token=pk_example`;
-            document.getElementById('img-gratis').src = `https://img.logo.dev/${item.dom_gratis}?token=pk_example`;
+            // Atualiza Imagens
+            const imgP = document.getElementById('img-pago');
+            const imgG = document.getElementById('img-gratis');
+
+            imgP.src = getIcon(item.dom_pago);
+            imgG.src = getIcon(item.dom_gratis);
+
+            // Fallbacks caso a imagem falhe
+            imgP.onerror = () => { imgP.src = fallbackIcon; };
+            imgG.onerror = () => { imgG.src = fallbackIcon; };
 
             card.classList.add('active');
-            i = (i + 1) % dados.length;
-        }, 1000);
 
-        setTimeout(loop, 30000); // 30 segundos por app
+            // Reinicia Barra de Progresso
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.transition = `width ${INTERVALO}ms linear`;
+                progressBar.style.width = '100%';
+            }, 100);
+
+            i = (i + 1) % dados.length;
+        }, 800);
+
+        setTimeout(loop, INTERVALO);
     }
 
     load();
 </script>
 </body>
 </html>
-
