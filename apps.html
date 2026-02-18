@@ -52,17 +52,19 @@
 <div id="card">
     <div id="cat-badge">CATEGORIA</div>
     
-    <div class="comparison">
-        <div class="app-box">
-            <img id="img-pago" class="app-img">
-            <span id="pago" class="name pago"></span>
-        </div>
-        <div class="vs">VS</div>
-        <div class="app-box">
-            <img id="img-gratis" class="app-img">
-            <span id="gratis" class="name gratis"></span>
-        </div>
-    </div>
+    // Dentro da função loop() no seu HTML, substitua as linhas das imagens por estas:
+
+const getIcon = (domain) => `https://www.google.com/s2/favicons?sz=128&domain=${domain}`;
+
+const imgPago = document.getElementById('img-pago');
+const imgGratis = document.getElementById('img-gratis');
+
+imgPago.src = getIcon(item.dom_pago);
+imgGratis.src = getIcon(item.dom_gratis);
+
+// PLANO B: Se o Google não achar, coloca um ícone padrão de "Software"
+imgPago.onerror = function() { this.src = 'https://cdn-icons-png.flaticon.com/512/7438/7438445.png'; };
+imgGratis.onerror = function() { this.src = 'https://cdn-icons-png.flaticon.com/512/7438/7438445.png'; };
     
     <div class="desc-box">
         <div id="desc" class="desc"></div>
@@ -111,3 +113,4 @@
 </script>
 </body>
 </html>
+
